@@ -19,9 +19,9 @@ typedef enum placement_style {
 	NONE, RANDOM, MANUAL
 }Placement_style;
 
-typedef enum first_player {
-	USER, COMPUTER
-}First_player;
+typedef enum active_player {
+	PLAYER1, PLAYER2
+}Active_player;
 
 typedef enum ship_name {
 	SHIP_NONE = '\0', CARRIER = 'c', BATTLESHIP = 'b', CRUISER = 'r', SUBMARINE = 's', DESTROYER = 'd'
@@ -34,6 +34,10 @@ typedef enum ship_status {
 typedef enum shot_status {
 	EMPTY, HIT, MISS
 }Shot_status;
+
+typedef enum menu_choice {
+	RULES = 1, PLAYERvPLAYER, PLAYERvCOMPUTER, EXIT
+}Menu_choice;
 
 typedef struct stats {
 	int total_hits;
@@ -139,16 +143,16 @@ Postconditions: player board is printed to the consol
 void print_player_board(char board[][MAX_COLS], int num_rows, int num_cols);
 
 /*
-Function: print_computer_board()
+Function: print_enemy_board()
 Date Created: 11.6.21
 Date Last Modified:
-Description: prints out the computer's board, hiding the placement of ships
+Description: prints out the enemy's board, hiding the placement of ships
 Input Parameters: a 2D array of characters for a player game board, number of rows, number of columns
 Returns: nothing
-Preconditions: computer's board is initialized
-Postconditions: the computer's board is printed to the screen hiding the placement of their ships
+Preconditions: enemy's board is initialized
+Postconditions: the enemy's board is printed to the screen hiding the placement of their ships
 */
-void print_computer_board(char board[][MAX_COLS], int num_rows, int num_cols);
+void print_enemy_board(char board[][MAX_COLS], int num_rows, int num_cols);
 
 /*
 Function: prompt_for_placement_style(void)
@@ -168,11 +172,11 @@ Date Created: 11.8.21
 Date Last Modified:
 Description: randomly selects the first player
 Input Parameters: none
-Returns: a First_player data type which corresponds to the first player
+Returns: a Active_player data type which corresponds to the first player
 Preconditions: none
 Postconditions: none
 */
-First_player select_first_player(void);
+Active_player select_first_player(void);
 
 /*
 Function: get_ship_status(char board[MAX_ROWS][MAX_COLS], int rows, int cols, Ship_name ship)
