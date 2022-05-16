@@ -145,10 +145,15 @@ int main(void){
 			}
 		}
 
+		system("pause");
+		system("cls");
+
 		if (user_choice == PLAYERvCOMPUTER) {
 			//randomly place computer's ships
 			printf("Generating the Computer's Board...\n");
 			randomly_place_all_ships(player_two_game_board, MAX_ROWS, MAX_COLS);
+			system("pause");
+			system("cls");
 		}
 
 		//randomly select the player to go first
@@ -156,8 +161,11 @@ int main(void){
 		if (current_player == PLAYER1) {
 			printf("Player 1 is going first.\n");
 		}
-		else {
+		else if (user_choice == PLAYERvPLAYER) {
 			printf("Player 2 is going first.\n");
+		}
+		else {
+			printf("The computer is going first.\n");
 		}
 
 		//clear the screen
@@ -327,7 +335,8 @@ int main(void){
 			else {
 				//print current player to battleship.log
 				fprintf(battleship_log, "\nComputer's Turn:\n");
-				printf("Computer's Turn");
+				printf("Computer's Turn\n");
+				printf("Your Board\n");
 
 				//randomize shot and make sure the spot has not been targeted before
 				do {
