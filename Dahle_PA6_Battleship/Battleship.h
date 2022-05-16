@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #define MAX_ROWS 10
 #define MAX_COLS 10
@@ -59,11 +60,11 @@ Date Created: 11.12.21
 Date Last Modified:
 Description: prints a welcome screen
 Input Parameters: none
-Returns: nothing
+Returns: the user selection
 Preconditions: none
-Postconditions: prints a welcome screen to consol
+Postconditions: prints a welcome screen to consol and prompts for a selection
 */
-void print_welcome_screen(void);
+int print_welcome_screen(void);
 
 /*
 Function: init_board()

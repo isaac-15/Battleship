@@ -74,20 +74,25 @@ int main(void){
 	First_player current_player = NONE;
 
 	//set up player boards
-	char player_game_board[MAX_ROWS][MAX_COLS];
-	char computer_game_board[MAX_ROWS][MAX_COLS];
+	char player_one_game_board[MAX_ROWS][MAX_COLS];
+	char player_two_game_board[MAX_ROWS][MAX_COLS];
 
 	//initalize boards
-	init_board(player_game_board, MAX_ROWS, MAX_COLS);
-	init_board(computer_game_board, MAX_ROWS, MAX_COLS);
+	init_board(player_one_game_board, MAX_ROWS, MAX_COLS);
+	init_board(player_two_game_board, MAX_ROWS, MAX_COLS);
 
 	//variables for targeting
 	int target_row = -1, target_col = -1;
 	Shot_status target_status;
 	Ship_name hit_ship = SHIP_NONE;
 
-	//prints rules
-	print_welcome_screen();
+	//prints welcome screen
+	int user_choice = -1;
+	user_choice = print_welcome_screen();
+
+	while (user_choice != 4){}
+	
+
 	print_rules();
 	system("pause");
 	system("cls");
@@ -98,19 +103,19 @@ int main(void){
 	//places user ships the requested way
 	switch (player_placement) {
 	case MANUAL:
-		manually_place_all_ships(player_game_board, MAX_ROWS, MAX_COLS);
+		manually_place_all_ships(player_one_game_board, MAX_ROWS, MAX_COLS);
 		break;
 	case RANDOM:
-		randomly_place_all_ships(player_game_board, MAX_ROWS, MAX_COLS);
+		randomly_place_all_ships(player_one_game_board, MAX_ROWS, MAX_COLS);
 		printf("\nYour ships have been placed.\n");
-		print_player_board(player_game_board, MAX_ROWS, MAX_COLS);
+		print_player_board(player_one_game_board, MAX_ROWS, MAX_COLS);
 		break;
 	}	
 
 	//randomly place computer's ships
 	printf("Generating the Computer's Board...\n");
-	randomly_place_all_ships(computer_game_board, MAX_ROWS, MAX_COLS);
-	//print_player_board(computer_game_board, MAX_ROWS, MAX_COLS); //for debugging
+	randomly_place_all_ships(player_two_game_board, MAX_ROWS, MAX_COLS);
+	//print_player_board(player_two_game_board, MAX_ROWS, MAX_COLS); //for debugging
 
 	//randomly select the player to go first
 	current_player = select_first_player();
@@ -125,30 +130,30 @@ int main(void){
 	system("pause");
 	system("cls");
 
-	while (game_board_has_ships(player_game_board, MAX_ROWS, MAX_COLS) && game_board_has_ships(computer_game_board, MAX_ROWS, MAX_COLS)) {
+	while (game_board_has_ships(player_one_game_board, MAX_ROWS, MAX_COLS) && game_board_has_ships(player_two_game_board, MAX_ROWS, MAX_COLS)) {
 		if (current_player == USER) {
 
 			//print current player to battleship.log
 			fprintf(battleship_log, "\nPlayer1: ");
 
 			//print enemy board
-			print_computer_board(computer_game_board, MAX_ROWS, MAX_COLS);
+			print_computer_board(player_two_game_board, MAX_ROWS, MAX_COLS);
 
 			//prompt for shot and make sure the spot has not been targeted before
 			do {
 				prompt_for_shot(MAX_ROWS, MAX_COLS, &target_row, &target_col);
-				target_status = can_take_shot(computer_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
+				target_status = can_take_shot(player_two_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
 			} while (target_status != EMPTY);
 			
 			//check if hit or miss, update game board, and what ship was hit
-			take_and_check_shot(computer_game_board, target_row, target_col, &target_status, &hit_ship);
+			take_and_check_shot(player_two_game_board, target_row, target_col, &target_status, &hit_ship);
 
 			//clear screen
 			system("pause");
 			system("cls");
 
 			//print out computer board
-			print_computer_board(computer_game_board, MAX_ROWS, MAX_COLS);
+			print_computer_board(player_two_game_board, MAX_ROWS, MAX_COLS);
 
 			//print the location of the shot
 			printf("You shot at row %d, col %d\n", target_row, target_col);
@@ -170,7 +175,7 @@ int main(void){
 			}
 			
 			// check if ship is sunk
-			if (SUNK == get_ship_status(computer_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
+			if (SUNK == get_ship_status(player_two_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
 				switch (hit_ship) {
 					case BATTLESHIP:
 						printf("You sunk your opponents battleship!\n");
@@ -213,14 +218,14 @@ int main(void){
 			do {
 				target_row = rand() % 10;
 				target_col = rand() % 10;
-				target_status = can_take_shot(player_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
+				target_status = can_take_shot(player_one_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
 			} while (target_status != EMPTY);
 
 			//check if hit or miss, update game board, and what ship was hit
-			take_and_check_shot(player_game_board, target_row, target_col, &target_status, &hit_ship);
+			take_and_check_shot(player_one_game_board, target_row, target_col, &target_status, &hit_ship);
 
 			//print out computer board
-			print_player_board(player_game_board, MAX_ROWS, MAX_COLS);
+			print_player_board(player_one_game_board, MAX_ROWS, MAX_COLS);
 
 			//print the location of the shot
 			printf("Enemy shot at row %d, col %d\n", target_row, target_col);
@@ -242,7 +247,7 @@ int main(void){
 			}
 
 			// check if ship is sunk
-			if (SUNK == get_ship_status(player_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
+			if (SUNK == get_ship_status(player_one_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
 				switch (hit_ship) {
 				case BATTLESHIP:
 					printf("The enemy sunk your battleship!\n");
@@ -309,7 +314,7 @@ int main(void){
 		//hits to misses ration (as %)
 		//won or lost game*/
 
-	print_winner_to_log(battleship_log, player_game_board);
+	print_winner_to_log(battleship_log, player_one_game_board);
 
 	fprintf(battleship_log, "\n*** Player1 Stats***\n");
 	print_player_stats(&player1, battleship_log);

@@ -33,8 +33,22 @@ Returns: nothing
 Preconditions: none
 Postconditions: prints a welcome screen to consol
 */
-void print_welcome_screen(void) {
-	printf("Welcome to Battleship!!\n\n");
+int print_welcome_screen(void) {
+
+	char ans[50];
+	char num = -1;
+	printf("Welcome to Battleship!!\n");
+	printf("1. Print Rules\n");
+	printf("2. Player vs Player\n");
+	printf("3. Player vs Computer\n");
+	printf("4. Exit\n");
+	do {
+		gets(ans);
+	} while (ans[0] == '\n' || !(strcmp(ans, "1") == 0 || strcmp(ans, "2") == 0 || strcmp(ans, "3") == 0 || strcmp(ans, "4") == 0));
+	//printf("%s", ans);
+
+	num = atoi(ans);
+	return num;
 }
 
 
