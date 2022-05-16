@@ -3,6 +3,9 @@
 /*
 Dev Notes:
 
+//! When playing pvp print out each player's own ships on their turn
+//! Game asks you to place your ships again after someone has won
+
 11.6.21
 	Added the functions Andy showed us in class
 		init_board()
