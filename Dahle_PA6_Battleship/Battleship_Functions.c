@@ -11,7 +11,7 @@ Preconditions: none
 Postconditions: rules of battleship are printed to consol
 */
 void print_rules(void) {
-	printf("1. Battleship is a two player game. You will be playing against a computer.\n\
+	printf("1. Battleship is a two player game. You will be playing against another player or a computer.\n\
 2. Your goal is to sink all of your opponents ships which consist of a carrier(5 spaces long),\n\
  a battleship(4 spaces long), a cruiser(3 spaces long), a submarine(3 spaces long), and a destroyer(2 spaces long)\n\
 3. You will start the game by placing your ships.\n\

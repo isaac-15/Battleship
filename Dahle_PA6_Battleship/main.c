@@ -69,14 +69,19 @@ int main(void){
 
 	//prints welcome screen
 	int user_choice = -1;
-	user_choice = print_welcome_screen();
+	
 	while (user_choice != EXIT) {
-
-		if (user_choice == RULES) {
-			print_rules();
-			system("pause");
-			system("cls");
-		}
+		
+		user_choice = -1;
+		
+		do {
+			user_choice = print_welcome_screen();
+			if (user_choice == RULES) {
+				print_rules();
+				system("pause");
+				system("cls");
+			}			
+		} while (user_choice == RULES);
 
 		srand((unsigned int)time(NULL));
 
@@ -160,7 +165,8 @@ int main(void){
 		}
 
 		//randomly select the player to go first
-		current_player = select_first_player();
+		//! this will break the player vs computer based on the way i coded the game while loop
+		/*current_player = select_first_player();
 		if (current_player == PLAYER1) {
 			printf("Player 1 is going first.\n");
 		}
@@ -169,249 +175,178 @@ int main(void){
 		}
 		else {
 			printf("The computer is going first.\n");
-		}
+		}*/
 
 		//clear the screen
 		system("pause");
 		system("cls");
 
-		while (game_board_has_ships(player_one_game_board, MAX_ROWS, MAX_COLS) && game_board_has_ships(player_two_game_board, MAX_ROWS, MAX_COLS)) {
+		char (*current_player_board)[MAX_COLS] = player_one_game_board;
+		char (*enemy_board)[MAX_COLS] = player_two_game_board;
+
+		current_player = PLAYER1;
+
+		while (game_board_has_ships(player_one_game_board, MAX_ROWS, MAX_COLS) && game_board_has_ships(player_two_game_board, MAX_ROWS, MAX_COLS)) {	
+			
+			
+			//print current player to battleship.log
 			if (current_player == PLAYER1) {
-				
-				//print current player to battleship.log
 				fprintf(battleship_log, "\nPlayer 1's Turn: ");
 				printf("Player 1's Turn\n");
-
-				//print enemy board
-				print_enemy_board(player_two_game_board, MAX_ROWS, MAX_COLS);
-
-				//prompt for shot and make sure the spot has not been targeted before
-				do {
-					prompt_for_shot(MAX_ROWS, MAX_COLS, &target_row, &target_col);
-					target_status = can_take_shot(player_two_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
-				} while (target_status != EMPTY);
-
-				//check if hit or miss, update game board, and what ship was hit
-				take_and_check_shot(player_two_game_board, target_row, target_col, &target_status, &hit_ship);
-
-				//clear screen
-				system("pause");
-				system("cls");
-
-				//print out computer board
-				print_enemy_board(player_two_game_board, MAX_ROWS, MAX_COLS);
-
-				//print the location of the shot
-				printf("You shot at row %d, col %d\n", target_row, target_col);
-				fprintf(battleship_log, " %d, %d ", target_row, target_col);
-
-				//print text indicating if you hit or missed the target
-				switch (target_status) {
-				case HIT:
-					printf("You hit one of you opponent's ships!\n");
-					fprintf(battleship_log, "\"hit\" ");
-					player1.total_hits++;
-					player1.total_shots++;
-					break;
-				case MISS:
-					printf("You missed\n");
-					fprintf(battleship_log, "\"miss\"");
-					player1.total_misses++;
-					player1.total_shots++;
-				}
-
-				// check if ship is sunk
-				if (SUNK == get_ship_status(player_two_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
-					switch (hit_ship) {
-					case BATTLESHIP:
-						printf("You sunk your opponents battleship!\n");
-						fprintf(battleship_log, "Sunk Battleship!");
-						break;
-					case CRUISER:
-						printf("You sunk your opponents cruiser!\n");
-						fprintf(battleship_log, "Sunk Cruiser!");
-						break;
-					case CARRIER:
-						printf("You sunk your opponents carrier!\n");
-						fprintf(battleship_log, "Sunk Carrier!");
-						break;
-					case SUBMARINE:
-						printf("You sunk your opponents submarine!\n");
-						fprintf(battleship_log, "Sunk Submarine!");
-						break;
-					case DESTROYER:
-						printf("You sunk your opponents destroyer!\n");
-						fprintf(battleship_log, "Sunk Destroyer!");
-						break;
-					}
-
-				}
-
-				//switch player
-				system("pause");
-				system("cls");
-				printf("Changing Players\n");
-				system("pause");
-				system("cls");
-
-				current_player = PLAYER2; //commented out for testing the player's turn
 			}
-			else if (current_player == PLAYER2 && user_choice == PLAYERvPLAYER) {
-				//print current player to battleship.log
+			else if (user_choice == PLAYERvPLAYER) {
 				fprintf(battleship_log, "\nPlayer 2's Turn: ");
 				printf("Player 2's Turn\n");
-
-				//print enemy board
-				print_enemy_board(player_one_game_board, MAX_ROWS, MAX_COLS);
-
-				//prompt for shot and make sure the spot has not been targeted before
-				do {
-					prompt_for_shot(MAX_ROWS, MAX_COLS, &target_row, &target_col);
-					target_status = can_take_shot(player_one_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
-				} while (target_status != EMPTY);
-
-				//check if hit or miss, update game board, and what ship was hit
-				take_and_check_shot(player_one_game_board, target_row, target_col, &target_status, &hit_ship);
-
-				//clear screen
-				system("pause");
-				system("cls");
-
-				//print out computer board
-				print_enemy_board(player_one_game_board, MAX_ROWS, MAX_COLS);
-
-				//print the location of the shot
-				printf("You shot at row %d, col %d\n", target_row, target_col);
-				fprintf(battleship_log, " %d, %d ", target_row, target_col);
-
-				//print text indicating if you hit or missed the target
-				switch (target_status) {
-				case HIT:
-					printf("You hit one of you opponent's ships!\n");
-					fprintf(battleship_log, "\"hit\" ");
-					player1.total_hits++;
-					player1.total_shots++;
-					break;
-				case MISS:
-					printf("You missed\n");
-					fprintf(battleship_log, "\"miss\"");
-					player1.total_misses++;
-					player1.total_shots++;
-				}
-
-				// check if ship is sunk
-				if (SUNK == get_ship_status(player_one_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
-					switch (hit_ship) {
-					case BATTLESHIP:
-						printf("You sunk your opponents battleship!\n");
-						fprintf(battleship_log, "Sunk Battleship!");
-						break;
-					case CRUISER:
-						printf("You sunk your opponents cruiser!\n");
-						fprintf(battleship_log, "Sunk Cruiser!");
-						break;
-					case CARRIER:
-						printf("You sunk your opponents carrier!\n");
-						fprintf(battleship_log, "Sunk Carrier!");
-						break;
-					case SUBMARINE:
-						printf("You sunk your opponents submarine!\n");
-						fprintf(battleship_log, "Sunk Submarine!");
-						break;
-					case DESTROYER:
-						printf("You sunk your opponents destroyer!\n");
-						fprintf(battleship_log, "Sunk Destroyer!");
-						break;
-					}
-
-				}
-
-				//switch player
-				system("pause");
-				system("cls");
-				printf("Changing Players\n");
-				system("pause");
-				system("cls");
-
-				current_player = PLAYER1; //commented out for testing the player's turn
 			}
 			else {
-				//print current player to battleship.log
 				fprintf(battleship_log, "\nComputer's Turn:\n");
 				printf("Computer's Turn\n");
 				printf("Your Board\n");
+			}
+			
+			if (user_choice == PLAYERvPLAYER || (user_choice == PLAYERvCOMPUTER && current_player == PLAYER1)) {
 
+				if (user_choice == PLAYERvPLAYER) {
+
+					//prints out the player's board
+					printf("Your board\n");
+					print_player_board(*current_player_board, MAX_ROWS, MAX_COLS);
+					printf("\n");
+				}
+
+				//print enemy board
+				print_enemy_board(*enemy_board, MAX_ROWS, MAX_COLS);
+
+				//prompt for shot and make sure the spot has not been targeted before
+				do {
+					prompt_for_shot(MAX_ROWS, MAX_COLS, &target_row, &target_col);
+					target_status = can_take_shot(*enemy_board, MAX_ROWS, MAX_COLS, target_row, target_col);
+				} while (target_status != EMPTY);
+
+				//check if hit or miss, update game board, and what ship was hit
+				take_and_check_shot(*enemy_board, target_row, target_col, &target_status, &hit_ship);
+
+
+				//clear screen
+				system("pause");
+				system("cls");
+
+				//print out computer board
+				print_enemy_board(*enemy_board, MAX_ROWS, MAX_COLS);
+
+				//print the location of the shot
+				printf("You shot at row %d, col %d\n", target_row, target_col);
+				fprintf(battleship_log, " %d, %d ", target_row, target_col);
+			}			
+			else if (current_player == PLAYER2 && user_choice == PLAYERvCOMPUTER) {
 				//randomize shot and make sure the spot has not been targeted before
 				do {
 					target_row = rand() % 10;
 					target_col = rand() % 10;
-					target_status = can_take_shot(player_one_game_board, MAX_ROWS, MAX_COLS, target_row, target_col);
+					target_status = can_take_shot(*enemy_board, MAX_ROWS, MAX_COLS, target_row, target_col);
 				} while (target_status != EMPTY);
 
 				//check if hit or miss, update game board, and what ship was hit
-				take_and_check_shot(player_one_game_board, target_row, target_col, &target_status, &hit_ship);
+				take_and_check_shot(*enemy_board, target_row, target_col, &target_status, &hit_ship);
 
-				//print out computer board
-				print_player_board(player_one_game_board, MAX_ROWS, MAX_COLS);
+				//print out player's board
+				print_player_board(*enemy_board, MAX_ROWS, MAX_COLS);
 
 				//print the location of the shot
 				printf("Enemy shot at row %d, col %d\n", target_row, target_col);
 				fprintf(battleship_log, " %d, %d ", target_row, target_col);
+			}
 
-				//print text indicating if you hit or missed the target
-				switch (target_status) {
-				case HIT:
-					printf("Enemy hit one of your ships!\n");
-					fprintf(battleship_log, "\"hit\" ");
+			//print text indicating if you hit or missed the target
+			switch (target_status) {
+			case HIT:
+				printf("Hit one of you opponent's ships!\n");
+				fprintf(battleship_log, "\"hit\" ");
+
+				if (current_player == PLAYER1) {
+					player1.total_hits++;
+					player1.total_shots++;
+				}
+				else {
 					player2.total_hits++;
 					player2.total_shots++;
-					break;
-				case MISS:
-					printf("Enemy missed\n");
-					fprintf(battleship_log, "\"miss\"");
+				}
+				
+				break;
+			case MISS:
+				printf("Missed\n");
+				fprintf(battleship_log, "\"miss\"");
+
+				if (current_player == PLAYER1) {
+					player1.total_misses++;
+					player1.total_shots++;
+				}
+				else {
 					player2.total_misses++;
 					player2.total_shots++;
 				}
+				
+			}
 
-				// check if ship is sunk
-				if (SUNK == get_ship_status(player_one_game_board, MAX_ROWS, MAX_COLS, hit_ship)) {
-					switch (hit_ship) {
-					case BATTLESHIP:
-						printf("The enemy sunk your battleship!\n");
-						fprintf(battleship_log, "Sunk Battleship!");
-						break;
-					case CRUISER:
-						printf("The enemy sunk your cruiser!\n");
-						fprintf(battleship_log, "Sunk Cruiser!");
-						break;
-					case CARRIER:
-						printf("The enemy sunk your carrier!\n");
-						fprintf(battleship_log, "Sunk Carrier!");
-						break;
-					case SUBMARINE:
-						printf("The enemy sunk your submarine!\n");
-						fprintf(battleship_log, "Sunk Submarine!");
-						break;
-					case DESTROYER:
-						printf("The enemy sunk your destroyer!\n");
-						fprintf(battleship_log, "Sunk Destroyer!");
-						break;
-					}
-
+			// check if ship is sunk
+			if (SUNK == get_ship_status(*enemy_board, MAX_ROWS, MAX_COLS, hit_ship)) {
+				switch (hit_ship) {
+				case BATTLESHIP:
+					printf("Sunk your opponents battleship!\n");
+					fprintf(battleship_log, "Sunk Battleship!");
+					break;
+				case CRUISER:
+					printf("Sunk your opponents cruiser!\n");
+					fprintf(battleship_log, "Sunk Cruiser!");
+					break;
+				case CARRIER:
+					printf("Sunk your opponents carrier!\n");
+					fprintf(battleship_log, "Sunk Carrier!");
+					break;
+				case SUBMARINE:
+					printf("Sunk your opponents submarine!\n");
+					fprintf(battleship_log, "Sunk Submarine!");
+					break;
+				case DESTROYER:
+					printf("Sunk your opponents destroyer!\n");
+					fprintf(battleship_log, "Sunk Destroyer!");
+					break;
 				}
 
-
-				//switch player
-
-				printf("Changing Players\n");
-				system("pause");
-				system("cls");
-
-				current_player = PLAYER1;
 			}
-		}
 
-		print_winner_to_log(battleship_log, player_one_game_board);
+			//switch player
+			system("pause");
+			system("cls");
+			printf("Changing Players\n");
+			system("pause");
+			system("cls");
+
+			if (current_player == PLAYER1) {
+				current_player = PLAYER2;
+				current_player_board = player_two_game_board;
+				enemy_board = player_one_game_board;
+			}
+			else {
+				current_player = PLAYER1;
+				current_player_board = player_one_game_board;
+				enemy_board = player_two_game_board;
+			}			
+		}		
+
+		//declaring the winner
+
+		printf("THE WINNER IS... ");
+
+		if (game_board_has_ships(player_one_game_board, MAX_ROWS, MAX_COLS)) {
+			printf("PLAYER 1!!!!");
+		}
+		else if(user_choice == PLAYERvPLAYER) {
+			printf("PLAYER 2!!!");
+		}
+		else {
+			printf("THE COMPUTER!!!");
+		}
 
 		fprintf(battleship_log, "\n*** Player1 Stats***\n");
 		print_player_stats(&player1, battleship_log);
