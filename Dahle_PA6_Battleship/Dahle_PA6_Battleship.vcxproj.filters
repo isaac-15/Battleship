@@ -27,9 +27,4 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="battleship.log">
-      <Filter>Resource Files</Filter>
-    </Text>
-  </ItemGroup>
 </Project>

@@ -63,9 +63,6 @@ Dev Notes:
 */
 
 int main(void){
-	
-	//open the battleship.log file
-	FILE* battleship_log = fopen("battleship.log", "w");
 
 	//prints welcome screen
 	int user_choice = -1;
@@ -182,15 +179,12 @@ int main(void){
 			
 			//print current player to battleship.log
 			if (current_player == PLAYER1) {
-				fprintf(battleship_log, "\nPlayer 1's Turn: ");
 				printf("Player 1's Turn\n");
 			}
 			else if (user_choice == PLAYERvPLAYER) {
-				fprintf(battleship_log, "\nPlayer 2's Turn: ");
 				printf("Player 2's Turn\n");
 			}
 			else {
-				fprintf(battleship_log, "\nComputer's Turn:\n");
 				printf("Computer's Turn\n");
 				printf("Your Board\n");
 			}
@@ -227,7 +221,6 @@ int main(void){
 
 				//print the location of the shot
 				printf("You shot at row %d, col %d\n", target_row, target_col);
-				fprintf(battleship_log, " %d, %d ", target_row, target_col);
 			}			
 			else if (current_player == PLAYER2 && user_choice == PLAYERvCOMPUTER) {
 				//randomize shot and make sure the spot has not been targeted before
@@ -245,14 +238,12 @@ int main(void){
 
 				//print the location of the shot
 				printf("Enemy shot at row %d, col %d\n", target_row, target_col);
-				fprintf(battleship_log, " %d, %d ", target_row, target_col);
 			}
 
 			//print text indicating if you hit or missed the target
 			switch (target_status) {
 			case HIT:
 				printf("Hit one of you opponent's ships!\n");
-				fprintf(battleship_log, "\"hit\" ");
 
 				if (current_player == PLAYER1) {
 					player1.total_hits++;
@@ -266,7 +257,6 @@ int main(void){
 				break;
 			case MISS:
 				printf("Missed\n");
-				fprintf(battleship_log, "\"miss\"");
 
 				if (current_player == PLAYER1) {
 					player1.total_misses++;
@@ -284,23 +274,18 @@ int main(void){
 				switch (hit_ship) {
 				case BATTLESHIP:
 					printf("Sunk your opponents battleship!\n");
-					fprintf(battleship_log, "Sunk Battleship!");
 					break;
 				case CRUISER:
 					printf("Sunk your opponents cruiser!\n");
-					fprintf(battleship_log, "Sunk Cruiser!");
 					break;
 				case CARRIER:
 					printf("Sunk your opponents carrier!\n");
-					fprintf(battleship_log, "Sunk Carrier!");
 					break;
 				case SUBMARINE:
 					printf("Sunk your opponents submarine!\n");
-					fprintf(battleship_log, "Sunk Submarine!");
 					break;
 				case DESTROYER:
 					printf("Sunk your opponents destroyer!\n");
-					fprintf(battleship_log, "Sunk Destroyer!");
 					break;
 				}
 
@@ -339,20 +324,11 @@ int main(void){
 			printf("THE COMPUTER!!!");
 		}
 
-		fprintf(battleship_log, "\n*** Player1 Stats***\n");
-		print_player_stats(&player1, battleship_log);
-		fprintf(battleship_log, "\n*** Player2 Stats***\n");
-		print_player_stats(&player2, battleship_log);
-
-		printf("\nStats successfuly printed to log file!\n");
-
+		printf("\n*** Player1 Stats***\n");
+		print_player_stats(&player1);
+		printf("\n*** Player2 Stats***\n");
+		print_player_stats(&player2);
 	}
 
-	
-	
-
-
-
-	fclose(battleship_log);
 	return 0;
 }

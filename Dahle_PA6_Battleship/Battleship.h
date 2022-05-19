@@ -244,36 +244,13 @@ Function: print_player_stats()
 Date Created: 11.9.21
 Date Last Modified:
 Description: prints the player's stats
-Input Parameters: a pointer to a stats struct for a player and a pointer to the file to print to
+Input Parameters: a pointer to a stats struct for a player 
 Returns: nothing
-Preconditions: the instance of the stats struct is initalized, and the file the pointer references has been opened
-Postconditions: the player stats are printed to the outfile
+Preconditions: the instance of the stats struct is initalized
+Postconditions: the player stats are printed to the consol
 */
 
-void print_player_stats(Stats* player_ptr, FILE* outfile_ptr);
-
-/*
-Function: print_winner()
-Date Created: 11.12.21
-Date Last Modified:
-Description: prints the winner of battleship
-Input Parameters: a game board to check if it still has ships
-Returns: nothing
-Preconditions: one player has had all their ships sunk
-Postconditions: prints the winner to the log file
-*/
-void print_winner_to_log(FILE* log, char game_board[MAX_ROWS][MAX_COLS]);
-
-/*
-Function:
-Date Created:
-Date Last Modified:
-Description:
-Input Parameters:
-Returns:
-Preconditions:
-Postconditions:
-*/
+void print_player_stats(Stats* player_ptr);
 
 
 #endif
