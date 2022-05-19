@@ -3,8 +3,7 @@
 /*
 Dev Notes:
 
-//! When playing pvp print out each player's own ships on their turn
-//! Game asks you to place your ships again after someone has won
+//! Have to debug to make sure the stats prints out properly
 
 11.6.21
 	Added the functions Andy showed us in class
@@ -315,13 +314,13 @@ int main(void){
 		printf("THE WINNER IS... ");
 
 		if (game_board_has_ships(player_one_game_board, MAX_ROWS, MAX_COLS)) {
-			printf("PLAYER 1!!!!");
+			printf("PLAYER 1!!!!\n");
 		}
 		else if(user_choice == PLAYERvPLAYER) {
-			printf("PLAYER 2!!!");
+			printf("PLAYER 2!!!\n");
 		}
 		else {
-			printf("THE COMPUTER!!!");
+			printf("THE COMPUTER!!!\n");
 		}
 
 		printf("\n*** Player1 Stats***\n");
