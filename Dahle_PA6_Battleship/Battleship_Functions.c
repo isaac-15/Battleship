@@ -11,7 +11,7 @@ Preconditions: none
 Postconditions: rules of battleship are printed to consol
 */
 void print_rules(void) {
-	printf("1. Battleship is a two player game. You will be playing against a computer.\n\
+	printf("1. Battleship is a two player game. You will be playing against another player or a computer.\n\
 2. Your goal is to sink all of your opponents ships which consist of a carrier(5 spaces long),\n\
  a battleship(4 spaces long), a cruiser(3 spaces long), a submarine(3 spaces long), and a destroyer(2 spaces long)\n\
 3. You will start the game by placing your ships.\n\
@@ -33,8 +33,22 @@ Returns: nothing
 Preconditions: none
 Postconditions: prints a welcome screen to consol
 */
-void print_welcome_screen(void) {
-	printf("Welcome to Battleship!!\n\n");
+int print_welcome_screen(void) {
+
+	char ans[50];
+	char num = -1;
+	printf("Welcome to Battleship!!\n");
+	printf("1. Print Rules\n");
+	printf("2. Player vs Player\n");
+	printf("3. Player vs Computer\n");
+	printf("4. Exit\n");
+	do {
+		gets(ans);
+	} while (ans[0] == '\n' || !(strcmp(ans, "1") == 0 || strcmp(ans, "2") == 0 || strcmp(ans, "3") == 0 || strcmp(ans, "4") == 0));
+	//printf("%s", ans);
+
+	num = atoi(ans);
+	return num;
 }
 
 
@@ -133,7 +147,7 @@ Function: randomly_place_ships()
 Date Created: 11.6.21
 Date Last Modified:
 Description: randomly places the ships on a board of characters
-Input Parameters: a 2D array of characters for a game board, num rows, num columns
+Input Parameters: a 2D array of characters for a game board, num rows, num columns, the active player
 Returns: nothing
 Preconditions: game board is initialized
 Postconditions: the board has all ships randomly placed on it
@@ -243,7 +257,7 @@ Function: manually_place_all_ships(char board[][MAX_COLS], int num_rows, int num
 Date Created: 11.6.21
 Date Last Modified:
 Description: a user manually places all ships on a game board
-Input Parameters: a 2D array of characters for a game board, the number of rows, and the number of columns
+Input Parameters: a 2D array of characters for a game board, the number of rows, and the number of columns, the active player
 Returns: nothing
 Preconditions: game board is initialized
 Postconditions: the board has all ships manually placed on it
@@ -294,8 +308,7 @@ Postconditions: player board is printed to the consol
 */
 void print_player_board(char board[][MAX_COLS], int num_rows, int num_cols) {
 	int row_index = 0, col_index = 0;
-
-	printf("Player 1 Board\n");
+	
 	printf("  0 1 2 3 4 5 6 7 8 9\n");
 	for (; row_index < num_rows; ++row_index)
 	{
@@ -309,19 +322,19 @@ void print_player_board(char board[][MAX_COLS], int num_rows, int num_cols) {
 }
 
 /*
-Function: print_computer_board()
+Function: print_enemy_board()
 Date Created: 11.6.21
 Date Last Modified:
-Description: prints out the computer's board, hiding the placement of ships
+Description: prints out the enemy's board, hiding the placement of ships
 Input Parameters: a 2D array of characters for a player game board, number of rows, number of columns
 Returns: nothing
-Preconditions: computer's board is initialized
-Postconditions: the computer's board is printed to the screen hiding the placement of their ships
+Preconditions: enemy's board is initialized
+Postconditions: the enemy's board is printed to the screen hiding the placement of their ships
 */
-void print_computer_board(char board[][MAX_COLS], int num_rows, int num_cols) {
+void print_enemy_board(char board[][MAX_COLS], int num_rows, int num_cols) {
 	int row_index = 0, col_index = 0;
 
-	printf("Player 2 Board\n");
+	printf("Your Opponent's Board\n");
 	printf("  0 1 2 3 4 5 6 7 8 9\n");
 	for (; row_index < num_rows; ++row_index)
 	{
@@ -379,21 +392,21 @@ Date Created: 11.8.21
 Date Last Modified:
 Description: randomly selects the first player
 Input Parameters: none
-Returns: a First_player data type which corresponds to the first player
+Returns: a Active_player data type which corresponds to the first player
 Preconditions: none
 Postconditions: none
 */
-First_player select_first_player(void) {
+Active_player select_first_player(void) {
 
-	First_player start_player = NONE;
+	Active_player start_player = NONE;
 	int rand_num = 0;
 	rand_num = rand() % 3;
 
 	switch (rand_num) {
 	case 1:
-		start_player = USER;
+		start_player = PLAYER1;
 	case 2:
-		start_player = COMPUTER;
+		start_player = PLAYER2;
 	}
 
 	return start_player;
