@@ -83,6 +83,10 @@ int main(void){
 			}			
 		} while (user_choice == RULES);
 
+		if (user_choice == EXIT) {
+			break;
+		}
+
 		srand((unsigned int)time(NULL));
 
 		//player stats
@@ -163,19 +167,6 @@ int main(void){
 			system("pause");
 			system("cls");
 		}
-
-		//randomly select the player to go first
-		//! this will break the player vs computer based on the way i coded the game while loop
-		/*current_player = select_first_player();
-		if (current_player == PLAYER1) {
-			printf("Player 1 is going first.\n");
-		}
-		else if (user_choice == PLAYERvPLAYER) {
-			printf("Player 2 is going first.\n");
-		}
-		else {
-			printf("The computer is going first.\n");
-		}*/
 
 		//clear the screen
 		system("pause");
